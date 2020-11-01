@@ -3,26 +3,47 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "calc.h"
 
 #define BUF_SIZE 1024
 
 int errno;
+
+// Operators stack
 char c_stack[BUF_SIZE];
 int c_top = -1;
+
+// Operands stack
 int i_stack[BUF_SIZE];
 int i_top = -1;
 
+// Stack operations
 static inline void c_push(const char e);
 static inline char c_pop();
 static inline void i_push(const int e);
 static inline int i_pop();
 
+/*
+ * Returns the operator's precedence
+ */
 static int precedence(const char op);
+/*
+ * Returns whether it is an operator
+ */
 static bool is_op(const char op);
+/*
+ * Evaluates the expression
+ */
 static int evaluate(const char* exp, int* result, CLIENT* clnt);
+/*
+ * Process an operation
+ */
 static int process_op(CLIENT* clnt);
+/*
+ * Fallback function for failure
+ */
 static void call_failed(CLIENT* clnt);
 
 int main (int argc, char* argv[]) {
@@ -42,6 +63,7 @@ int main (int argc, char* argv[]) {
     char* in = (char*) calloc(BUF_SIZE, sizeof(char));
     int result;
 
+    // Input command
     while (fgets(in, BUF_SIZE, stdin)) {
         in[strlen(in) - 1] = '\0';
         if (strcmp(in, "exit") == 0) {
@@ -52,6 +74,7 @@ int main (int argc, char* argv[]) {
             continue;
         }
 
+        // Input expression
         fgets(in, BUF_SIZE, stdin);
         in[strlen(in) - 1] = '\0';
         if (strlen(in) == 0) {
@@ -59,6 +82,7 @@ int main (int argc, char* argv[]) {
             continue;
         }
 
+        // Evaluate expression
         if (evaluate(in, &result, clnt) == 0) {
             printf("The answer is %d\n", result);
         }
@@ -66,6 +90,7 @@ int main (int argc, char* argv[]) {
 
     printf("\nProgram exit\n");
     clnt_destroy(clnt);
+    free(in);
 
     return 0;
 }
@@ -125,11 +150,14 @@ static int evaluate(const char* exp, int* result, CLIENT* clnt) {
         char c = exp[i];
 
         if (!is_op(c)) {
+            // NOT an operator
+
             if (!isdigit(c)) {
                 printf("Invalid expression (illegal character)\n");
                 return 1;
             }
 
+            // Parse operand and push to stack
             int num = 0;
             while (i < n && isdigit(exp[i])) {
                 num = num * 10 + exp[i++] - '0';
@@ -138,11 +166,15 @@ static int evaluate(const char* exp, int* result, CLIENT* clnt) {
             i_push(num);
         }
         else {
+            // Operator
+
+            // Change the power operator "**" to '^'
             if (c == '*' && exp[i + 1] == '*') {
                 c = '^';
                 i++;
             }
 
+            // Process operations according to precedence
             while (c_top > -1 && precedence(c_stack[c_top]) >= precedence(c)) {
                 if (process_op(clnt) != 0) {
                     return 1;
@@ -152,6 +184,7 @@ static int evaluate(const char* exp, int* result, CLIENT* clnt) {
         }
     }
 
+    // Process remaining operations
     while (c_top > -1) {
         if (process_op(clnt) != 0) {
             return 1;
@@ -170,9 +203,12 @@ static int process_op(CLIENT* clnt) {
 
     int* result;
     struct expression ex;
+
+    // Obtain operands
     ex.op2 = i_pop();
     ex.op1 = i_pop();
 
+    // Process operation with RPC
     switch(c_stack[c_top]) {
         case '+':
             if ((result = addition_1(&ex, clnt)) == NULL) {
