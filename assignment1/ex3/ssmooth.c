@@ -5,7 +5,7 @@
 #include "ppm.h"
 #include "utils.h"
 
-#define FNAME_MOD "_smooth"
+#define FNAME_MOD "_ssmooth"
 
 int errno;
 

@@ -5,7 +5,7 @@
 #include "ppm.h"
 #include "utils.h"
 
-#define FNAME_MOD "_flip"
+#define FNAME_MOD "_sflip"
 
 int errno;
 
