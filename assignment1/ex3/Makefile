@@ -4,7 +4,7 @@ LIBS_O := ppm.o utils.o
 LIBS_MPI_O := mpi_ppm.o mpi_utils.o
 
 SEQ_OUT := sflip sgray ssmooth
-PAR_OUT := pflip pgray # psmooth
+PAR_OUT := pflip pgray psmooth
 
 default: $(SEQ_OUT) $(PAR_OUT)
 
@@ -31,6 +31,10 @@ pflip: $(LIBS_H) pflip.c $(LIBS)
 pgray: $(LIBS_H) pgray.c $(LIBS)
 	mpicc -Wall -c pgray.c -o pgray.o
 	mpicc -Wall $(LIBS_MPI_O) pgray.o -o pgray.out
+
+psmooth: $(LIBS_H) psmooth.c $(LIBS)
+	mpicc -Wall -c psmooth.c -o psmooth.o
+	mpicc -Wall $(LIBS_MPI_O) psmooth.o -o psmooth.out
 
 ppm: ppm.h ppm.c
 	gcc -Wall -c ppm.c -o ppm.o
