@@ -1,4 +1,5 @@
-LIBS := ppm utils
+LIBS_SEQ := ppm utils
+LIBS_MPI := mpi_ppm mpi_utils
 LIBS_H := ppm.h utils.h
 LIBS_O := ppm.o utils.o
 LIBS_MPI_O := mpi_ppm.o mpi_utils.o
@@ -12,36 +13,40 @@ seq: $(SEQ_OUT)
 
 par: $(PAR_OUT)
 
-sflip: $(LIBS_H) sflip.c $(LIBS)
+sflip: $(LIBS_H) sflip.c $(LIBS_SEQ)
 	gcc -Wall -c sflip.c -o sflip.o
 	gcc -Wall $(LIBS_O) sflip.o -o sflip.out
 
-sgray: $(LIBS_H) sgray.c $(LIBS)
+sgray: $(LIBS_H) sgray.c $(LIBS_SEQ)
 	gcc -Wall -c sgray.c -o sgray.o
 	gcc -Wall $(LIBS_O) sgray.o -o sgray.out
 
-ssmooth: $(LIBS_H) ssmooth.c $(LIBS)
+ssmooth: $(LIBS_H) ssmooth.c $(LIBS_SEQ)
 	gcc -Wall -c ssmooth.c -o ssmooth.o
 	gcc -Wall $(LIBS_O) ssmooth.o -o ssmooth.out
 
-pflip: $(LIBS_H) pflip.c $(LIBS)
+pflip: $(LIBS_H) pflip.c $(LIBS_MPI)
 	mpicc -Wall -c pflip.c -o pflip.o
 	mpicc -Wall $(LIBS_MPI_O) pflip.o -o pflip.out
 
-pgray: $(LIBS_H) pgray.c $(LIBS)
+pgray: $(LIBS_H) pgray.c $(LIBS_MPI)
 	mpicc -Wall -c pgray.c -o pgray.o
 	mpicc -Wall $(LIBS_MPI_O) pgray.o -o pgray.out
 
-psmooth: $(LIBS_H) psmooth.c $(LIBS)
+psmooth: $(LIBS_H) psmooth.c $(LIBS_MPI)
 	mpicc -Wall -c psmooth.c -o psmooth.o
 	mpicc -Wall $(LIBS_MPI_O) psmooth.o -o psmooth.out
 
 ppm: ppm.h ppm.c
 	gcc -Wall -c ppm.c -o ppm.o
-	mpicc -Wall -c ppm.c -o mpi_ppm.o
 
 utils: $(LIBS_H) utils.c
 	gcc -Wall -c utils.c -o utils.o
+
+mpi_ppm: ppm.h ppm.c
+	mpicc -Wall -c ppm.c -o mpi_ppm.o
+
+mpi_utils: $(LIBS_H) utils.c
 	mpicc -Wall -c utils.c -o mpi_utils.o
 
 clean:
