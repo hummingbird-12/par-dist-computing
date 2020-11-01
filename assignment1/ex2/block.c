@@ -16,14 +16,13 @@ int main(int argc, char **argv) {
 
     if (rank == 0) {
         srand(time(NULL) + rank);
-        printf("Prefix sums of %d random integers using `MPI_Scan()`\n", size);
+        printf("===== Prefix sums of %d random integers using blocking send/recv =====\n", size);
         start = MPI_Wtime();
 
         // Generate random values
         int* val = (int*) malloc(sizeof(int) * size);
         for (int i = 0; i < size; i++) {
-            // val[i] = rand() % MAX_VAL;
-            val[i] = i;
+            val[i] = rand() % MAX_VAL;
         }
 
         // Scatter data
@@ -53,7 +52,7 @@ int main(int argc, char **argv) {
 
     if (rank == 0) {
         end = MPI_Wtime();
-        printf("Elapsed time: %lfms\n", (end - start) * 1000);
+        printf("Elapsed time: %.3lfms\n", (end - start) * 1000);
     }
 
     MPI_Finalize();
