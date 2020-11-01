@@ -7,11 +7,21 @@ LIBS_MPI_O := mpi_ppm.o mpi_utils.o
 SEQ_OUT := sflip sgray ssmooth
 PAR_OUT := pflip pgray psmooth
 
+FLIP := sflip pflip
+GRAY := sgray pgray
+SMOOTH := ssmooth psmooth
+
 default: $(SEQ_OUT) $(PAR_OUT)
 
 seq: $(SEQ_OUT)
 
 par: $(PAR_OUT)
+
+flip: $(FLIP)
+
+gray: $(GRAY)
+
+smooth: $(SMOOTH)
 
 sflip: $(LIBS_H) sflip.c $(LIBS_SEQ)
 	gcc -Wall -c sflip.c -o sflip.o

@@ -43,13 +43,20 @@ int main (int argc, char* argv[]) {
     int result;
 
     while (fgets(in, BUF_SIZE, stdin)) {
-        if (strlen(in) == 0) {
+        in[strlen(in) - 1] = '\0';
+        if (strcmp(in, "exit") == 0) {
             break;
         }
+        if (strcmp(in, "test") != 0) {
+            printf("Unkown command: %s\n", in);
+            continue;
+        }
 
+        fgets(in, BUF_SIZE, stdin);
         in[strlen(in) - 1] = '\0';
         if (strlen(in) == 0) {
-            break;
+            printf("Invalid expression\n");
+            continue;
         }
 
         if (evaluate(in, &result, clnt) == 0) {
