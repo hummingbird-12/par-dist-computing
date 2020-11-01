@@ -172,7 +172,6 @@ static int process_op(CLIENT* clnt) {
                 call_failed(clnt);
                 return 1;
             }
-            printf("[CLIENT] %d + %d is %d\n", ex.op1, ex.op2, *result);
             break;
         case '-':
             ex.op2 *= -1;

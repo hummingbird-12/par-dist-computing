@@ -4,7 +4,6 @@ int* addition_1_svc(expression* argp, struct svc_req* rqstp) {
 	static int result;
 
         result = argp->op1 + argp->op2;
-        printf("[SERVER] %d + %d is %d\n", argp->op1, argp->op2, result);
 
 	return &result;
 }
