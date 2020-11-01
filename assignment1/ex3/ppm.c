@@ -76,6 +76,8 @@ void write_ppm(const PPM* ppm) {
         perror("Error while fclose()");
         exit(1);
     }
+
+    printf("File %s has been created.\n", ppm->fname);
 }
 
 void free_ppm(PPM* ppm) {

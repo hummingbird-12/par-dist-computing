@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
-    char* fname = argv[1];
+    const char* fname = argv[1];
     PPM* image = read_ppm(fname);
     PPM* trans = create_mod_ppm(image, FNAME_MOD);
     const int rows = image->rows;
