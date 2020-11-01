@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
             exit(1);
         }
 
-        printf("Image flipping using parallel processing\n");
+        printf("===== Image flipping using parallel processing =====\n");
         start = MPI_Wtime();
 
         // Prepare source image
@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
         write_ppm(trans);
 
         end = MPI_Wtime();
-        printf("Elapsed time: %lfms\n", (end - start) * 1000);
+        printf("Elapsed time: %.3lfms\n", (end - start) * 1000);
 
         free_ppm(image);
         free_ppm(trans);
