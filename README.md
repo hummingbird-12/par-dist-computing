@@ -1,11 +1,3 @@
-# Introduction to Parallel and Distributed Computing course (CSEG414/CSE5414)
+# CSEG414/CSE5414 - Introduction to Parallel and Distributed Computing
 
-Assignments for the Introduction to Parallel and Distributed Computing course
-(CSEG414/CSE5414), Fall 2020, Sogang University
-
-## Developer
-
-Inho Kim
-
-Computer Science and Engineering, Sogang University
-
+Workspace for CSEG414/CSE5414 - Introduction to Parallel and Distributed Computing, Fall 2020, Sogang University
