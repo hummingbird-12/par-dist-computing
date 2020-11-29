@@ -1,57 +1,30 @@
 # VIM
 *.swp
 
-# === .gitignore for C project ===
+### macOS template
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
 
-# Prerequisites
-*.d
+# Icon must end with two \r
+Icon
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+# Thumbnails
+._*
 
-# Linker output
-*.ilk
-*.map
-*.exp
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
-
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk

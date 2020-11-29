@@ -53,8 +53,37 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# === Project specific ignores ===
+# === .gitignore for C++ project ===
 
-ex3/*.ppm
-ex3/ppm_example/*
-!ex3/ppm_example/small/
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
