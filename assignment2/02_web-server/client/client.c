@@ -78,7 +78,7 @@ void* request_files(void* param) {
     sim_args* args = (sim_args*) param;
 
     for (int i = 0; i < args->requests_cnt; i++) {
-        const int file_idx = i % args->files_cnt;
+        const int file_idx = (i + args->id) % args->files_cnt;
         request(args->id, i, args->server_addr, args->server_port,
                 args->req_files[file_idx]);
         sleep(1);
@@ -127,7 +127,7 @@ void request(const int thread_id, const int iter, const char* addr,
     }
 
     // Send request
-    req_size = sprintf(request, "GET %s HTTP/1.0\r\n", path);
+    req_size = sprintf(request, "GET %s HTTP/1.0\n\r\n", path);
     if (write(sock_fd, request, req_size) == -1) {
         error("Failed to write to socket\n");
         return;
@@ -151,7 +151,8 @@ void request(const int thread_id, const int iter, const char* addr,
         res_size += bytes_read;
     }
 
-    printf("[Thread %d] %d - Received %d bytes\n", thread_id, iter, res_size);
+    printf("[Thread %2d] File #%d (%s) - Received %d bytes\n", thread_id, iter,
+           path, res_size);
 }
 
 void error(const char* format, ...) {

@@ -76,7 +76,7 @@ void handle_request(request* req) {
 
     // Check existence of requested file
     if (stat(req_path, &stat_buf) == -1) {
-        error("Requested file not found\n");
+        error("Requested file not found: %s\n", req_path);
         print_header(con_stream, "404", "Not Found", "text/html");
         fprintf(con_stream, "404 Not Found\n");
         fclose(con_stream);

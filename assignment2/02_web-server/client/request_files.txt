@@ -1,4 +1,4 @@
-files/a.html
-files/b.html
-files/c.html
-files/d.html
+/files/a.html
+/files/b.html
+/files/c.html
+/files/d.html
