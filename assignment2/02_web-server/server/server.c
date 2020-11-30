@@ -65,6 +65,7 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
+    // Create worker threads
     initialize_syncs();
     for (int i = 0; i < workers_cnt; i++) {
         pthread_t tid;
