@@ -70,6 +70,7 @@ int main(int argc, char** argv) {
         pthread_join(thread_ids[i], NULL);
     }
     free(thread_ids);
+    free(thread_args);
 
     return 0;
 }
