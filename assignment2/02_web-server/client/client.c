@@ -6,10 +6,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
+#include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
 
 #define BUF_SIZE 512
+
+#define GET_TIME(now)                           \
+    {                                           \
+        struct timeval t;                       \
+        gettimeofday(&t, NULL);                 \
+        now = t.tv_sec + t.tv_usec / 1000000.0; \
+    }
 
 typedef struct _ARGUMENTS {
     char req_files[BUF_SIZE][BUF_SIZE];
@@ -32,6 +40,8 @@ int main(int argc, char** argv) {
     FILE* req_files_fp;
     pthread_t* thread_ids;
     int threads_cnt;
+
+    double start, end;
 
     // Parse arguments
     if (argc != 6) {
@@ -60,6 +70,7 @@ int main(int argc, char** argv) {
 
     thread_ids = (pthread_t*) malloc(sizeof(pthread_t) * threads_cnt);
     thread_args = (sim_args*) malloc(sizeof(sim_args) * threads_cnt);
+    GET_TIME(start);
     for (int i = 0; i < threads_cnt; i++) {
         thread_args[i] = args;
         thread_args[i].id = i;
@@ -69,6 +80,9 @@ int main(int argc, char** argv) {
     for (int i = 0; i < threads_cnt; i++) {
         pthread_join(thread_ids[i], NULL);
     }
+    GET_TIME(end);
+    printf("Elapsed time: %.3lfs\n", end - start);
+
     free(thread_ids);
     free(thread_args);
 
