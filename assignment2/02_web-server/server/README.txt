@@ -1,4 +1,4 @@
-Exercise 4 - RPC Calculator
+Web server
 ---------------------------
 
 * Instructions
@@ -14,4 +14,3 @@ Exercise 4 - RPC Calculator
 * Developer
 ID: 20161577
 Name: Inho Kim
-
