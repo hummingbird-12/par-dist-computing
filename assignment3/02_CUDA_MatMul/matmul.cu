@@ -33,10 +33,8 @@ static void generate_matrices() {
     srand(time(NULL));
     for (int i = 0; i < MAT_SIZE; i++) {
         for (int j = 0; j < MAT_SIZE; j++) {
-            // mat_a[i][j] = (float) (rand() - rand()) / RAND_MAX;
-            // mat_b[i][j] = (float) (rand() - rand()) / RAND_MAX;
-            mat_a[i][j] = 1.0f;
-            mat_b[i][j] = 1.0f;
+            mat_a[i][j] = (float) (rand() - rand()) / RAND_MAX;
+            mat_b[i][j] = (float) (rand() - rand()) / RAND_MAX;
         }
     }
 }
