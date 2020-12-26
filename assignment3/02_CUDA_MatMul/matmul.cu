@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #include "matmul.cuh"
@@ -25,6 +26,9 @@ int main(int argc, char* argv[]) {
 
     matmul_global(BLOCK_DIM, mat_a, mat_b, mat_c);
     print_matrix("matmul_global.txt", mat_c);
+
+    matmul_shared(BLOCK_DIM, mat_a, mat_b, mat_c);
+    print_matrix("matmul_shared.txt", mat_c);
 
     return 0;
 }
