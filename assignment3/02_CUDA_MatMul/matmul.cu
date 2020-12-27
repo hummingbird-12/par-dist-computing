@@ -65,4 +65,3 @@ static void print_matrix(const char* path, const float mat[][MAT_SIZE]) {
         return;
     }
 }
-

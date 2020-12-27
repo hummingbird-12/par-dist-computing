@@ -4,7 +4,9 @@
 
 __global__ static void kernel(float* mat_a, float* mat_b, float* mat_c);
 
-__host__ void matmul_global(const int BLOCK_DIM, const float mat_a[][MAT_SIZE], const float mat_b[][MAT_SIZE], float mat_c[][MAT_SIZE]) {
+__host__ void matmul_global(const int BLOCK_DIM, const float mat_a[][MAT_SIZE],
+                            const float mat_b[][MAT_SIZE],
+                            float mat_c[][MAT_SIZE]) {
     const int SIZE = sizeof(float) * MAT_SIZE * MAT_SIZE;
     float *dev_a, *dev_b, *dev_c;
     double start, end;
@@ -42,7 +44,7 @@ __global__ static void kernel(float* mat_a, float* mat_b, float* mat_c) {
     int col = blockIdx.x * blockDim.x + threadIdx.x;
 
     for (int i = 0; i < MAT_SIZE; i++) {
-        mat_c[row * MAT_SIZE + col] += mat_a[row * MAT_SIZE + i] * mat_b[i * MAT_SIZE + col];
+        mat_c[row * MAT_SIZE + col] +=
+            mat_a[row * MAT_SIZE + i] * mat_b[i * MAT_SIZE + col];
     }
 }
-
