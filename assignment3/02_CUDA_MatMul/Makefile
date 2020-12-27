@@ -1,4 +1,4 @@
-objects = matmul.o matmul_global.o matmul_shared.o
+objects = matmul.o matmul_global.o matmul_shared.o matmul_optimized.o
 app = matmul
 
 all: $(objects)

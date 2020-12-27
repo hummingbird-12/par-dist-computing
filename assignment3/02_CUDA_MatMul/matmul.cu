@@ -30,6 +30,9 @@ int main(int argc, char* argv[]) {
     matmul_shared(BLOCK_DIM, mat_a, mat_b, mat_c);
     print_matrix("matmul_shared.txt", mat_c);
 
+    matmul_optimized(BLOCK_DIM, mat_a, mat_b, mat_c);
+    print_matrix("matmul_optimized.txt", mat_c);
+
     return 0;
 }
 
