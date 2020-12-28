@@ -14,5 +14,6 @@
 #define DEF_BLOCK_SIZE 512
 
 __host__ void reduction_divergent(const int arr[ARR_SIZE]);
+__host__ void reduction_opt_1(const int arr[ARR_SIZE]);
 
 #endif /* _MAX_REDUCTION_CUH_INCLUDED_ */

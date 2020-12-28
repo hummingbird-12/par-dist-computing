@@ -1,4 +1,4 @@
-objects = max_reduction.o divergent.o
+objects = max_reduction.o divergent.o opt_1.o
 app = max_reduction
 
 all: $(objects)

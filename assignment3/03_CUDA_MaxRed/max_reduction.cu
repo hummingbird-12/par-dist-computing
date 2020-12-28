@@ -22,6 +22,7 @@ int main(int argc, char* argv[]) {
     generate_integers();
     sequential();
     reduction_divergent(arr);
+    reduction_opt_1(arr);
 
     return 0;
 }
