@@ -21,6 +21,7 @@ int main(int argc, char* argv[]) {
 
     generate_integers();
     sequential();
+    reduction_divergent(arr);
 
     return 0;
 }
@@ -40,6 +41,6 @@ static int sequential() {
         mx = max(mx, arr[i]);
     }
     GET_TIME(end);
-    printf("[sequential] Maximum: %d\tTime: %fs\n", mx, end - start);
+    printf("[reduction_sequential]\tMaximum: %d\tTime: %fs\n", mx, end - start);
     return mx;
 }
