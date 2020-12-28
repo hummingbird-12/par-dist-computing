@@ -9,4 +9,3 @@ all: $(objects)
 
 clean:
 	rm -f *.o *.txt $(app)
-
