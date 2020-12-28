@@ -5,14 +5,14 @@
 
 __global__ static void kernel(int* arr, int* n, int* stride);
 
-__host__ void reduction_divergent(const int* arr, const int n) {
+__host__ void reduction_opt_2(const int* arr, const int n, const int BLOCK_SIZE) {
     const int SIZE = sizeof(int) * n;
     int mx;
     int *dev_arr, *dev_n, *dev_stride;
     double start, end;
 
-    const int GRID_DIM = ceil((float) n / DEF_BLOCK_SIZE);
-    dim3 block(DEF_BLOCK_SIZE);
+    const int GRID_DIM = ceil((float) n / BLOCK_SIZE);
+    dim3 block(BLOCK_SIZE);
     dim3 grid(GRID_DIM);
 
     GET_TIME(start);
@@ -24,9 +24,11 @@ __host__ void reduction_divergent(const int* arr, const int n) {
     cudaMemcpy(dev_arr, arr, SIZE, cudaMemcpyHostToDevice);
     cudaMemcpy(dev_n, &n, sizeof(int), cudaMemcpyHostToDevice);
 
-    for (int i = n, stride = 1; i >= 1; i /= 2, stride *= 2) {
+    for (int i = n, stride = (n + 1) / 2;
+         i >= 1;
+         i /= 2, stride = (stride + 1) / 2) {
         cudaMemcpy(dev_stride, &stride, sizeof(int), cudaMemcpyHostToDevice);
-        kernel<<<grid, block>>>(dev_arr, dev_n, dev_stride);
+        kernel<<<grid, block, SIZE>>>(dev_arr, dev_n, dev_stride);
         cudaDeviceSynchronize();
     }
 
@@ -34,7 +36,7 @@ __host__ void reduction_divergent(const int* arr, const int n) {
 
     GET_TIME(end);
 
-    printf("[reduction_divergent]\tMaximum: %d\tTime: %fs\n", mx, end - start);
+    printf("[reduction_opt_2]\tMaximum: %d\tTime: %fs\n", mx, end - start);
 
     cudaFree(dev_arr);
     cudaFree(dev_n);
@@ -43,7 +45,11 @@ __host__ void reduction_divergent(const int* arr, const int n) {
 
 __global__ static void kernel(int* arr, int* n, int* stride) {
     const int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    if (tid % (2 * (*stride)) == 0 && tid + *stride < *n) {
-        arr[tid] = max(arr[tid], arr[tid + *stride]);
+    extern __shared__ int shared[];
+
+    if (tid < *stride && tid + *stride < *n) {
+        shared[tid] = arr[tid];
+        shared[tid + *stride] = arr[tid + *stride];
+        arr[tid] = max(shared[tid], shared[tid + *stride]);
     }
 }

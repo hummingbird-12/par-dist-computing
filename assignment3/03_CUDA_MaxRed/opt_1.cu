@@ -3,34 +3,33 @@
 
 #include "max_reduction.cuh"
 
-__global__ static void kernel(int arr[ARR_SIZE], int* stride);
+__global__ static void kernel(int* arr, int* n, int* stride);
 
-__host__ void reduction_opt_1(const int arr[ARR_SIZE]) {
-    const int SIZE = sizeof(int) * ARR_SIZE;
-    int mx, n, stride;
-    int *dev_arr, *dev_stride;
+__host__ void reduction_opt_1(const int* arr, const int n) {
+    const int SIZE = sizeof(int) * n;
+    int mx;
+    int *dev_arr, *dev_n, *dev_stride;
     double start, end;
 
-    const int GRID_DIM = ceil((float) ARR_SIZE / DEF_BLOCK_SIZE);
+    const int GRID_DIM = ceil((float) n / DEF_BLOCK_SIZE);
     dim3 block(DEF_BLOCK_SIZE);
     dim3 grid(GRID_DIM);
 
     GET_TIME(start);
 
     cudaMalloc((void**) &dev_arr, SIZE);
+    cudaMalloc((void**) &dev_n, sizeof(int));
     cudaMalloc((void**) &dev_stride, sizeof(int));
 
     cudaMemcpy(dev_arr, arr, SIZE, cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_n, &n, sizeof(int), cudaMemcpyHostToDevice);
 
-    n = ARR_SIZE;
-    stride = (ARR_SIZE + 1) / 2;
-    while (n >= 1) {
+    for (int i = n, stride = (n + 1) / 2;
+         i >= 1;
+         i /= 2, stride = (stride + 1) / 2) {
         cudaMemcpy(dev_stride, &stride, sizeof(int), cudaMemcpyHostToDevice);
-        kernel<<<grid, block>>>(dev_arr, dev_stride);
+        kernel<<<grid, block>>>(dev_arr, dev_n, dev_stride);
         cudaDeviceSynchronize();
-
-        stride = (stride + 1) / 2;
-        n /= 2;
     }
 
     cudaMemcpy(&mx, dev_arr, sizeof(int), cudaMemcpyDeviceToHost);
@@ -40,12 +39,13 @@ __host__ void reduction_opt_1(const int arr[ARR_SIZE]) {
     printf("[reduction_opt_1]\tMaximum: %d\tTime: %fs\n", mx, end - start);
 
     cudaFree(dev_arr);
+    cudaFree(dev_n);
     cudaFree(dev_stride);
 }
 
-__global__ static void kernel(int arr[ARR_SIZE], int* stride) {
+__global__ static void kernel(int* arr, int* n, int* stride) {
     const int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    if (tid < (*stride) && tid + (*stride) < ARR_SIZE) {
-        arr[tid] = max(arr[tid], arr[tid + (*stride)]);
+    if (tid < *stride && tid + *stride < *n) {
+        arr[tid] = max(arr[tid], arr[tid + *stride]);
     }
 }
