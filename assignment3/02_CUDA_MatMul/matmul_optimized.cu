@@ -26,7 +26,8 @@ __host__ void matmul_optimized(const int BLOCK_SIZE,
     cudaMemcpy(dev_b, mat_b, SIZE, cudaMemcpyHostToDevice);
     cudaMemset(dev_c, 0, SIZE);
 
-    const int SHARED_MEM_SIZE = sizeof(float) * BLOCK_SIZE * BLOCK_SIZE*(2 * GRID_DIM + 1);
+    const int SHARED_MEM_SIZE =
+        sizeof(float) * BLOCK_SIZE * BLOCK_SIZE * (2 * GRID_DIM + 1);
     kernel<<<grid, block, SHARED_MEM_SIZE>>>(dev_a, dev_b, dev_c);
     cudaDeviceSynchronize();
 
