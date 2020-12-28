@@ -8,4 +8,4 @@ all: $(objects)
 	nvcc -x cu -arch=sm_35 -I. -dc -lm $< -o $@
 
 clean:
-	rm -f *.o *.txt $(app)
+	rm -f *.o $(app)
