@@ -56,13 +56,6 @@ int main(int argc, char* argv[]) {
         }
     }
 
-// #pragma omp parallel for ordered
-//     for (int i = 0; i < words_cnt; i++) {
-//         if (query_string(dictionary[i])) {
-// #pragma omp ordered
-//             fprintf(output, "%s\n", dictionary[i]);
-//         }
-//     }
 #pragma omp parallel for
     for (int i = 0; i < words_cnt; i++) {
         if (query_string(dictionary[i])) {
