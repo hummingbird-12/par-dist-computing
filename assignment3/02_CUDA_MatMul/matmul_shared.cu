@@ -4,15 +4,15 @@
 
 __global__ static void kernel(float* mat_a, float* mat_b, float* mat_c);
 
-__host__ void matmul_shared(const int BLOCK_DIM, const float mat_a[][MAT_SIZE],
+__host__ void matmul_shared(const int BLOCK_SIZE, const float mat_a[][MAT_SIZE],
                             const float mat_b[][MAT_SIZE],
                             float mat_c[][MAT_SIZE]) {
     const int SIZE = sizeof(float) * MAT_SIZE * MAT_SIZE;
     float *dev_a, *dev_b, *dev_c;
     double start, end;
 
-    const int GRID_DIM = MAT_SIZE / BLOCK_DIM;
-    dim3 block(BLOCK_DIM, BLOCK_DIM);
+    const int GRID_DIM = MAT_SIZE / BLOCK_SIZE;
+    dim3 block(BLOCK_SIZE, BLOCK_SIZE);
     dim3 grid(GRID_DIM, GRID_DIM);
 
     GET_TIME(start);
@@ -25,16 +25,15 @@ __host__ void matmul_shared(const int BLOCK_DIM, const float mat_a[][MAT_SIZE],
     cudaMemcpy(dev_b, mat_b, SIZE, cudaMemcpyHostToDevice);
     cudaMemset(dev_c, 0, SIZE);
 
-    kernel<<<grid, block,
-             sizeof(float) * BLOCK_DIM * BLOCK_DIM*(2 * GRID_DIM + 1)>>>(
-        dev_a, dev_b, dev_c);
+    const int SHARED_MEM_SIZE = sizeof(float) * BLOCK_SIZE * BLOCK_SIZE*(2 * GRID_DIM + 1);
+    kernel<<<grid, block, SHARED_MEM_SIZE>>>(dev_a, dev_b, dev_c);
     cudaDeviceSynchronize();
 
     cudaMemcpy(mat_c, dev_c, SIZE, cudaMemcpyDeviceToHost);
 
     GET_TIME(end);
 
-    printf("[matmul_shared] Time: %fs\n", end - start);
+    printf("[matmul_shared]\tTime: %fs\n", end - start);
 
     cudaFree(dev_a);
     cudaFree(dev_b);
