@@ -24,8 +24,7 @@ __host__ void reduction_opt_1(const int* arr, const int n) {
     cudaMemcpy(dev_arr, arr, SIZE, cudaMemcpyHostToDevice);
     cudaMemcpy(dev_n, &n, sizeof(int), cudaMemcpyHostToDevice);
 
-    for (int i = n, stride = (n + 1) / 2;
-         i >= 1;
+    for (int i = n, stride = (n + 1) / 2; i >= 1;
          i /= 2, stride = (stride + 1) / 2) {
         cudaMemcpy(dev_stride, &stride, sizeof(int), cudaMemcpyHostToDevice);
         kernel<<<grid, block>>>(dev_arr, dev_n, dev_stride);

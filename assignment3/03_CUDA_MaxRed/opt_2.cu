@@ -5,7 +5,8 @@
 
 __global__ static void kernel(int* arr, int* n, int* stride);
 
-__host__ void reduction_opt_2(const int* arr, const int n, const int BLOCK_SIZE) {
+__host__ void reduction_opt_2(const int* arr, const int n,
+                              const int BLOCK_SIZE) {
     const int SIZE = sizeof(int) * n;
     int mx;
     int *dev_arr, *dev_n, *dev_stride;
@@ -24,8 +25,7 @@ __host__ void reduction_opt_2(const int* arr, const int n, const int BLOCK_SIZE)
     cudaMemcpy(dev_arr, arr, SIZE, cudaMemcpyHostToDevice);
     cudaMemcpy(dev_n, &n, sizeof(int), cudaMemcpyHostToDevice);
 
-    for (int i = n, stride = (n + 1) / 2;
-         i >= 1;
+    for (int i = n, stride = (n + 1) / 2; i >= 1;
          i /= 2, stride = (stride + 1) / 2) {
         cudaMemcpy(dev_stride, &stride, sizeof(int), cudaMemcpyHostToDevice);
         kernel<<<grid, block, SIZE>>>(dev_arr, dev_n, dev_stride);

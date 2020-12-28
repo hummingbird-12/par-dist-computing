@@ -15,6 +15,7 @@
 
 __host__ void reduction_divergent(const int* arr, const int n);
 __host__ void reduction_opt_1(const int* arr, const int n);
-__host__ void reduction_opt_2(const int* arr, const int n, const int BLOCK_SIZE);
+__host__ void reduction_opt_2(const int* arr, const int n,
+                              const int BLOCK_SIZE);
 
 #endif /* _MAX_REDUCTION_CUH_INCLUDED_ */
