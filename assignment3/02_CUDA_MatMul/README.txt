@@ -12,6 +12,10 @@ Problem 2 - CUDA Programming 1
    $ ./matmul 256
 
 * Notes
+- The development was done within Google Colaboratory's GPU environment.
+  Use this template to open Google Colaboratory in Visual Studio Code server:
+  https://colab.research.google.com/github/hummingbird-12/par-dist-computing/blob/main/assignment3/Colabcode%20template.ipynb
+- The program has been developed with `nvcc` using `-arch=sm_35` option.
 - In the program output:
    `matmul_global` -> implementation using global memory
    `matmul_shared` -> implementation using shared memory
